@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tegans FbFriends Example</title>
+    
+    <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+    <script src="http://connect.facebook.net/en_US/all.js"></script>
+
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="css/fbfriends.css" rel="stylesheet">
+    <link href="css/toastr.css" rel="stylesheet">
+    
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/fbfriends.js"></script>
+    <script src="js/toastr.js"></script>
+
+    <script>
+    
+    	
+		var toast = function(friends){
+		  toastr.info("Selected: " + friends.map(function(friend){ return friend.name}).join(', '));
+		};
+    
+    	$(function() {
+    	
+		    FB.init({
+		      appId      : '476943222328544',
+		      status     : true,
+		      cookie     : true,
+		      xfbml      : true
+		    });
+		    
+		    
+		    $("#fb_friend_selector_btn").click(function() {
+	
+			    $("#fb_friends").fbFriends({
+					multiple: true,
+					whenDone: toast,
+					friendChecked: function(friend){
+						toastr.warning("Friend checked: " + friend.name);
+					},
+					friendUnchecked: function(friend){
+						toastr.warning("Friend unchecked: " + friend.name);
+					},
+					shower: function(e){
+						$('#fb_selector').modal("show");
+					},
+					hider: function(e){
+						$('#fb_selector').modal("hide");
+					},
+				});
+			
+			});
+			
+			
+			$('#fb_friend_submit').click(function(){
+      			$("#fb_friends").fbFriends("submit");
+   			});
+		
+		});
+    
+    </script>
+  </head>
+  <body>
+  
+  <div id="fb-root"></div>
+  
+  
+	<button class="btn" id="fb_friend_selector_btn">Refer your Friends</button>
+  
+	<div id="fb_selector" class="modal hide" role="dialog">
+	
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal" type="button" aria-hidden="true">&times;</button>
+			<h3>Select Some Friends, Yo!</h3>
+		</div>
+		
+		<div class="modal-body">
+			<div id="fb_friends"></div>
+		</div>
+		
+		<div class="modal-footer"> 
+			<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			<button id="fb_friend_submit" class="btn btn-primary">Done</button>
+		</div>
+		
+	</div>
+  
+  </body>
+  
+</html>
